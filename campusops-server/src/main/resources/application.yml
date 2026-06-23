@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: campusops-server
+
+server:
+  port: 3016
