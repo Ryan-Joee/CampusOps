@@ -12,6 +12,10 @@ public enum ResultCode {
     FORBIDDEN("FORBIDDEN", "无权访问"),
     NOT_FOUND("NOT_FOUND", "资源不存在"),
 
+    AUTH_FAILED("AUTH_FAILED", "用户名或密码错误"),
+    ACCOUNT_DISABLED("ACCOUNT_DISABLED", "账号已禁用"),
+    TOKEN_INVALID("TOKEN_INVALID", "登录状态无效或已过期"),
+
     BUSINESS_ERROR("BUSINESS_ERROR", "业务处理失败"),
     INTERNAL_ERROR("INTERNAL_ERROR", "系统内部错误");
 

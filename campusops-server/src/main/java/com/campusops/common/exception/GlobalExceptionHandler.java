@@ -22,7 +22,21 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ApiResponse<Void>> handleBusinessException(BusinessException ex) {
         log.warn("业务异常: code={}, message={}", ex.getCode(), ex.getMessage());
-        return ResponseEntity.ok(ApiResponse.error(ex.getCode(), ex.getMessage()));
+        HttpStatus status = resolveHttpStatus(ex.getCode());
+        return ResponseEntity.status(status).body(ApiResponse.error(ex.getCode(), ex.getMessage()));
+    }
+
+    private HttpStatus resolveHttpStatus(String code) {
+        if (code.startsWith("AUTH_") || "UNAUTHORIZED".equals(code) || "TOKEN_INVALID".equals(code)) {
+            return HttpStatus.UNAUTHORIZED;
+        }
+        if ("FORBIDDEN".equals(code)) {
+            return HttpStatus.FORBIDDEN;
+        }
+        if ("BAD_REQUEST".equals(code)) {
+            return HttpStatus.BAD_REQUEST;
+        }
+        return HttpStatus.OK;
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

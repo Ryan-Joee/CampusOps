@@ -1,25 +1,29 @@
 package com.campusops.security.config;
 
+import com.campusops.security.filter.JwtAuthenticationFilter;
+import com.campusops.security.handler.RestAccessDeniedHandler;
+import com.campusops.security.handler.RestAuthenticationEntryPoint;
+import com.campusops.security.jwt.JwtTokenProvider;
+import com.campusops.user.service.UserQueryService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
- * 第一阶段的 Spring Security 临时配置。
- *
+ * Spring Security 主配置。
+ * <p>
  * 设计取舍：
- * - 关闭 CSRF，使用无状态会话，为后续 JWT 接入做准备。
- * - 显式放行 Swagger / OpenAPI 与 /auth/login。
- * - 其它请求当前阶段一律放行，等登录认证模块完成后改为 .authenticated()。
- *
- * 注意：requestMatchers 中的路径相对 server.servlet.context-path（/campusops），
- * 因此这里不要再带 /campusops 前缀。
+ * - 关闭 CSRF / CORS / formLogin / httpBasic，使用无状态 JWT 认证。
+ * - 放行 /auth/login、Swagger 相关路径和 /error。
+ * - 其他接口强制要求认证。
+ * - 认证失败与无权限通过统一 JSON 响应返回。
  */
 @Configuration
 @EnableWebSecurity
@@ -35,23 +39,35 @@ public class SecurityConfig {
     };
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http,
+                                                   JwtTokenProvider jwtTokenProvider,
+                                                   UserQueryService userQueryService,
+                                                   RestAuthenticationEntryPoint entryPoint,
+                                                   RestAccessDeniedHandler accessDeniedHandler) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(e -> e
+                        .authenticationEntryPoint(entryPoint)
+                        .accessDeniedHandler(accessDeniedHandler))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PUBLIC_PATHS).permitAll()
-                        // TODO 接入登录认证后改为 .authenticated()
-                        .anyRequest().permitAll()
-                );
+                        .anyRequest().authenticated())
+                .addFilterBefore(
+                        new JwtAuthenticationFilter(jwtTokenProvider, userQueryService),
+                        UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
 
+    /**
+     * 使用 DelegatingPasswordEncoder，开发阶段兼容 {noop} 初始化数据。
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 }
