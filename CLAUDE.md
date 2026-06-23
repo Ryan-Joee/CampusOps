@@ -57,6 +57,9 @@ For major technical choices, also read `docs/adr/`.
 - Axios.
 - ECharts.
 - The frontend should be a management console and ticket workbench, not a landing page or visual showcase.
+- Development server port: `3017`.
+- Frontend API base URL: `/campusops`.
+- Current frontend baseline includes `src/router/`, `src/api/`, `src/stores/`, `src/layouts/`, and `src/views/`.
 
 ## API Prefix
 

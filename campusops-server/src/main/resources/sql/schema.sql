@@ -39,7 +39,7 @@ CREATE TABLE sys_user (
     deleted TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否删除：0 否，1 是',
     UNIQUE KEY uk_sys_user_username (username),
     KEY idx_sys_user_status (status)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户表';
 
 CREATE TABLE sys_role (
     id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '主键',
@@ -50,7 +50,7 @@ CREATE TABLE sys_role (
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     deleted TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否删除：0 否，1 是',
     UNIQUE KEY uk_sys_role_code (role_code)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='角色表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='角色表';
 
 CREATE TABLE sys_user_role (
     id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '主键',
@@ -59,7 +59,7 @@ CREATE TABLE sys_user_role (
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     UNIQUE KEY uk_sys_user_role (user_id, role_id),
     KEY idx_sys_user_role_role_id (role_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户角色关联表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户角色关联表';
 
 CREATE TABLE sys_permission (
     id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '主键',
@@ -73,7 +73,7 @@ CREATE TABLE sys_permission (
     deleted TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否删除：0 否，1 是',
     UNIQUE KEY uk_sys_permission_code (permission_code),
     KEY idx_sys_permission_parent_id (parent_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='权限表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='权限表';
 
 CREATE TABLE sys_role_permission (
     id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '主键',
@@ -82,7 +82,7 @@ CREATE TABLE sys_role_permission (
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     UNIQUE KEY uk_sys_role_permission (role_id, permission_id),
     KEY idx_sys_role_permission_permission_id (permission_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='角色权限关联表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='角色权限关联表';
 
 CREATE TABLE ticket_category (
     id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '主键',
@@ -96,7 +96,7 @@ CREATE TABLE ticket_category (
     deleted TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否删除：0 否，1 是',
     UNIQUE KEY uk_ticket_category_code (category_code),
     KEY idx_ticket_category_parent_id (parent_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='工单分类表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='工单分类表';
 
 CREATE TABLE ticket (
     id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '主键',
@@ -123,7 +123,7 @@ CREATE TABLE ticket (
     KEY idx_ticket_status (status),
     KEY idx_ticket_category_id (category_id),
     KEY idx_ticket_created_at (created_at)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='工单主表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='工单主表';
 
 CREATE TABLE ticket_record (
     id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '主键',
@@ -137,7 +137,7 @@ CREATE TABLE ticket_record (
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     KEY idx_ticket_record_ticket_id (ticket_id),
     KEY idx_ticket_record_operator_id (operator_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='工单处理记录表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='工单处理记录表';
 
 CREATE TABLE ticket_comment (
     id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '主键',
@@ -149,7 +149,7 @@ CREATE TABLE ticket_comment (
     deleted TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否删除：0 否，1 是',
     KEY idx_ticket_comment_ticket_id (ticket_id),
     KEY idx_ticket_comment_user_id (user_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='工单评论表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='工单评论表';
 
 CREATE TABLE ticket_attachment (
     id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '主键',
@@ -163,7 +163,7 @@ CREATE TABLE ticket_attachment (
     deleted TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否删除：0 否，1 是',
     KEY idx_ticket_attachment_ticket_id (ticket_id),
     KEY idx_ticket_attachment_uploader_id (uploader_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='工单附件表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='工单附件表';
 
 CREATE TABLE ticket_evaluation (
     id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '主键',
@@ -174,7 +174,7 @@ CREATE TABLE ticket_evaluation (
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     UNIQUE KEY uk_ticket_evaluation_ticket_id (ticket_id),
     KEY idx_ticket_evaluation_user_id (user_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='工单评价表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='工单评价表';
 
 CREATE TABLE knowledge_category (
     id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '主键',
@@ -187,7 +187,7 @@ CREATE TABLE knowledge_category (
     deleted TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否删除：0 否，1 是',
     UNIQUE KEY uk_knowledge_category_code (category_code),
     KEY idx_knowledge_category_parent_id (parent_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='知识库分类表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='知识库分类表';
 
 CREATE TABLE knowledge_article (
     id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '主键',
@@ -206,7 +206,7 @@ CREATE TABLE knowledge_article (
     KEY idx_knowledge_article_status (status),
     KEY idx_knowledge_article_category_id (category_id),
     KEY idx_knowledge_article_source_ticket_id (source_ticket_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='知识库文章表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='知识库文章表';
 
 CREATE TABLE knowledge_article_tag (
     id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '主键',
@@ -215,7 +215,7 @@ CREATE TABLE knowledge_article_tag (
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     KEY idx_knowledge_article_tag_article_id (article_id),
     KEY idx_knowledge_article_tag_name (tag_name)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='知识库文章标签表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='知识库文章标签表';
 
 CREATE TABLE ai_analysis_record (
     id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '主键',
@@ -233,7 +233,7 @@ CREATE TABLE ai_analysis_record (
     KEY idx_ai_analysis_business (business_type, business_id),
     KEY idx_ai_analysis_type (analysis_type),
     KEY idx_ai_analysis_created_by (created_by)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='AI 分析记录表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='AI 分析记录表';
 
 CREATE TABLE ai_recommendation (
     id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '主键',
@@ -246,7 +246,7 @@ CREATE TABLE ai_recommendation (
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     KEY idx_ai_recommendation_ticket_id (ticket_id),
     KEY idx_ai_recommendation_target (target_type, target_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='AI 推荐结果表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='AI 推荐结果表';
 
 CREATE TABLE operation_log (
     id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '主键',
@@ -261,7 +261,7 @@ CREATE TABLE operation_log (
     KEY idx_operation_log_operator_id (operator_id),
     KEY idx_operation_log_business (business_type, business_id),
     KEY idx_operation_log_created_at (created_at)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='操作日志表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='操作日志表';
 
 CREATE TABLE notification (
     id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '主键',
@@ -275,7 +275,6 @@ CREATE TABLE notification (
     read_at DATETIME NULL COMMENT '阅读时间',
     KEY idx_notification_receiver_id (receiver_id),
     KEY idx_notification_read_status (read_status)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='站内通知表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='站内通知表';
 
 SET FOREIGN_KEY_CHECKS = 1;
-
