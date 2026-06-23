@@ -25,6 +25,7 @@ Before backend or frontend development, read these documents first:
 - `docs/10-工程启动计划.md`
 - `docs/11-AI开发工作流.md`
 - `docs/12-AI-Agent协作规范.md`
+- `docs/14-后端分层与包结构规范.md`
 
 For major technical choices, also read `docs/adr/`.
 
@@ -45,6 +46,7 @@ For major technical choices, also read `docs/adr/`.
 - ORM choice: MyBatis Plus.
 - JPA is not used in this project.
 - Database: MySQL, unless a later ADR changes this decision.
+- Backend package structure and layering must follow `docs/14-后端分层与包结构规范.md`.
 
 ## Frontend Baseline
 
@@ -76,6 +78,7 @@ For major technical choices, also read `docs/adr/`.
 - Add new backend dependencies only when they are needed by the current implementation stage.
 - Do not add Redis, Spring AI, LangChain4j, message queues, or vector database dependencies before their corresponding module is planned.
 - Do not add Flyway or Liquibase in the first stage. Database initialization uses plain SQL files unless a later ADR changes this decision.
+- Do not commit local AI agent workspace directories such as `.agents/`, `.codex/`, or `.claude/`.
 
 ## Development Requirements
 

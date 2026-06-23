@@ -9,6 +9,11 @@ Thumbs.db
 *.iws
 *.ipr
 
+# Local AI agent workspace
+.agents/
+.codex/
+.claude/
+
 # Java / Maven
 target/
 build/
