@@ -1,6 +1,38 @@
 spring:
   application:
     name: campusops-server
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/campusops?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: 123456
 
 server:
   port: 3016
+  servlet:
+    context-path: /campusops
+
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  type-aliases-package: com.campusops.**.entity
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+# springdoc 路径相对于 server.servlet.context-path，最终访问地址为
+# /campusops/swagger-ui.html 与 /campusops/v3/api-docs
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+campusops:
+  security:
+    jwt:
+      secret: change-this-dev-secret-change-this-dev-secret
+      expiration-seconds: 7200
