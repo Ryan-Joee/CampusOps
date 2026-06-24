@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useUserStore } from '../stores/user'
 import BasicLayout from '../layouts/BasicLayout.vue'
 import LoginView from '../views/LoginView.vue'
 import DashboardView from '../views/DashboardView.vue'
@@ -11,7 +12,7 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: LoginView,
-    meta: { title: '登录' },
+    meta: { title: '登录', public: true },
   },
   {
     path: '/',
@@ -51,8 +52,29 @@ const router = createRouter({
   routes,
 })
 
-router.beforeEach((to) => {
+router.beforeEach(async (to) => {
   document.title = to.meta.title ? `${to.meta.title} - CampusOps` : 'CampusOps'
+
+  if (to.meta.public) {
+    return true
+  }
+
+  const token = localStorage.getItem('campusops_token')
+  if (!token) {
+    return { path: '/login', query: { redirect: to.fullPath } }
+  }
+
+  const userStore = useUserStore()
+  if (!userStore.userInfo) {
+    try {
+      await userStore.fetchCurrentUser()
+    } catch {
+      userStore.clearSession()
+      return { path: '/login', query: { redirect: to.fullPath } }
+    }
+  }
+
+  return true
 })
 
 export default router

@@ -17,7 +17,21 @@ service.interceptors.request.use((config) => {
 
 service.interceptors.response.use(
   (response) => response.data,
-  (error) => Promise.reject(error)
+  (error) => {
+    const message = error.response?.data?.message || error.message || '请求失败'
+    const status = error.response?.status
+
+    // 401 means token expired or invalid — clear local state and redirect to login
+    if (status === 401) {
+      localStorage.removeItem('campusops_token')
+      // Avoid redirect loop when the failing request is the login page itself
+      if (window.location.pathname !== '/login') {
+        window.location.href = '/login'
+      }
+    }
+
+    return Promise.reject(new Error(message))
+  },
 )
 
 export default service

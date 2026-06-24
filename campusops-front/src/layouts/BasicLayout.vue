@@ -2,14 +2,30 @@
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { DataAnalysis, Document, House, Tickets } from '@element-plus/icons-vue'
+import { useUserStore } from '../stores/user'
 
 const route = useRoute()
 const router = useRouter()
+const userStore = useUserStore()
 
 const activeMenu = computed(() => route.path)
 
+const displayName = computed(() => {
+  return userStore.userInfo?.realName || userStore.userInfo?.username || '未登录'
+})
+
+const displayInfo = computed(() => {
+  const parts = []
+  if (userStore.userInfo?.department) parts.push(userStore.userInfo.department)
+  if (userStore.userInfo?.roles?.length) {
+    parts.push(userStore.userInfo.roles.join('、'))
+  }
+  return parts.join(' · ')
+})
+
 function handleCommand(command) {
   if (command === 'logout') {
+    userStore.logoutAction()
     router.push('/login')
   }
 }
@@ -50,13 +66,12 @@ function handleCommand(command) {
       <el-header class="app-header">
         <div>
           <div class="page-title">{{ route.meta.title || 'CampusOps' }}</div>
-          <div class="page-subtitle">面向校园 IT 服务的 AI 增强型工单管理平台</div>
+          <div v-if="displayInfo" class="page-subtitle">{{ displayInfo }}</div>
         </div>
         <el-dropdown trigger="click" @command="handleCommand">
-          <el-button>管理员</el-button>
+          <el-button>{{ displayName }}</el-button>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item command="profile">个人信息</el-dropdown-item>
               <el-dropdown-item command="logout">退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </template>
