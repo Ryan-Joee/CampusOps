@@ -2,8 +2,8 @@ package com.campusops.security.filter;
 
 import com.campusops.security.jwt.JwtTokenProvider;
 import com.campusops.security.jwt.LoginUserPrincipal;
-import com.campusops.user.entity.SysUserEntity;
-import com.campusops.user.service.UserQueryService;
+import com.campusops.entity.SysUserEntity;
+import com.campusops.service.UserQueryService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

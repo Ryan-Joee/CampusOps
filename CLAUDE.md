@@ -2,6 +2,21 @@
 
 CampusOps is the English name of this project. The Chinese project name is "面向校园 IT 服务的 AI 增强型工单管理平台".
 
+## Skill 使用规则
+
+- 在做出任何响应或操作之前，先检查 `.claude/skills/` 目录中是否有适用的技能。
+- 哪怕只有 1% 的可能性适用，也必须通过 `Skill` 工具加载确认，不靠记忆判断。
+- 优先级：流程技能（`brainstorming`、`writing-plans`、`systematic-debugging`）→ 执行技能（`test-driven-development`、`subagent-driven-development` 等）。
+- 涉及中文文档、中文 review、中文 commit 时，叠加使用对应的 `chinese-*` 系列技能。
+- 常见场景路由：
+  - 新功能 / 设计变更 → `brainstorming` + `writing-plans`
+  - 修 bug → `systematic-debugging`
+  - 写代码 → `test-driven-development`
+  - 代码审查 → `requesting-code-review` + `chinese-code-review`
+  - 多独立任务 → `dispatching-parallel-agents`
+  - 完成开发 → `verification-before-completion`
+  - 收尾分支 → `finishing-a-development-branch`
+
 ## Project Structure
 
 - `docs/`: requirements, architecture, permissions, AI module design, testing, and development documents.

@@ -4,7 +4,7 @@ import com.campusops.security.filter.JwtAuthenticationFilter;
 import com.campusops.security.handler.RestAccessDeniedHandler;
 import com.campusops.security.handler.RestAuthenticationEntryPoint;
 import com.campusops.security.jwt.JwtTokenProvider;
-import com.campusops.user.service.UserQueryService;
+import com.campusops.service.UserQueryService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
