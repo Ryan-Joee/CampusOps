@@ -17,7 +17,11 @@ public enum ResultCode {
     TOKEN_INVALID("TOKEN_INVALID", "登录状态无效或已过期"),
 
     BUSINESS_ERROR("BUSINESS_ERROR", "业务处理失败"),
-    INTERNAL_ERROR("INTERNAL_ERROR", "系统内部错误");
+    INTERNAL_ERROR("INTERNAL_ERROR", "系统内部错误"),
+
+    TICKET_NOT_FOUND("TICKET_NOT_FOUND", "工单不存在或无权访问"),
+    CATEGORY_NOT_FOUND("CATEGORY_NOT_FOUND", "工单分类不存在"),
+    INVALID_TICKET_PRIORITY("INVALID_TICKET_PRIORITY", "无效的工单优先级");
 
     private final String code;
     private final String message;

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.campusops.mapper.TicketMapper">
+
+    <sql id="ticketColumns">
+        t.id, t.ticket_no, t.title, t.description, t.category_id, t.priority,
+        t.status, t.submitter_id, t.assignee_id, t.assigned_at, t.resolved_at,
+        t.closed_at, t.due_at, t.source, t.ai_summary, t.created_at, t.updated_at, t.deleted
+    </sql>
+
+    <!-- 分页条件片段 -->
+    <sql id="pageWhere">
+        <where>
+            t.deleted = 0
+            <if test="status != null and status != ''">
+                AND t.status = #{status}
+            </if>
+            <if test="categoryId != null">
+                AND t.category_id = #{categoryId}
+            </if>
+            <if test="keyword != null and keyword != ''">
+                AND (t.ticket_no LIKE CONCAT('%', #{keyword}, '%') OR t.title LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+            <choose>
+                <when test="submitterIds != null and submitterIds.size() > 0 and assigneeId != null">
+                    AND (t.submitter_id IN
+                    <foreach collection="submitterIds" item="id" open="(" separator="," close=")">#{id}</foreach>
+                    OR t.assignee_id = #{assigneeId})
+                </when>
+                <when test="submitterIds != null and submitterIds.size() > 0">
+                    AND t.submitter_id IN
+                    <foreach collection="submitterIds" item="id" open="(" separator="," close=")">#{id}</foreach>
+                </when>
+                <when test="assigneeId != null">
+                    AND t.assignee_id = #{assigneeId}
+                </when>
+            </choose>
+        </where>
+    </sql>
+
+    <select id="selectTicketPage" resultType="com.campusops.entity.TicketEntity">
+        SELECT <include refid="ticketColumns"/>
+        FROM ticket t
+        <include refid="pageWhere"/>
+        ORDER BY t.created_at DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="countTicketPage" resultType="long">
+        SELECT COUNT(*)
+        FROM ticket t
+        <include refid="pageWhere"/>
+    </select>
+
+    <select id="selectTicketDetail" resultType="com.campusops.entity.TicketEntity">
+        SELECT <include refid="ticketColumns"/>
+        FROM ticket t
+        WHERE t.id = #{id} AND t.deleted = 0
+    </select>
+
+</mapper>
