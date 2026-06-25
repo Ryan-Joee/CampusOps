@@ -30,7 +30,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private static final String[] PUBLIC_PATHS = {
+            "/auth/captcha",
             "/auth/login",
+            "/auth/register",
             "/swagger-ui.html",
             "/swagger-ui/**",
             "/v3/api-docs",

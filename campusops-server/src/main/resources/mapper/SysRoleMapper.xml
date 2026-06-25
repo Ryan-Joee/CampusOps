@@ -9,4 +9,14 @@
         WHERE sur.user_id = #{userId} AND sr.deleted = 0
     </select>
 
+    <select id="selectByRoleCode" resultType="com.campusops.entity.SysRoleEntity">
+        SELECT id, role_code, role_name, description, created_at, updated_at, deleted
+        FROM sys_role
+        WHERE role_code = #{roleCode} AND deleted = 0
+    </select>
+
+    <insert id="insertUserRole">
+        INSERT INTO sys_user_role (user_id, role_id, created_at) VALUES (#{userId}, #{roleId}, NOW())
+    </insert>
+
 </mapper>

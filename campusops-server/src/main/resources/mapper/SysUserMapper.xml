@@ -16,4 +16,26 @@
         WHERE id = #{id} AND deleted = 0
     </select>
 
+    <select id="selectByAccount" resultType="com.campusops.entity.SysUserEntity">
+        SELECT id, username, password_hash, real_name, email, phone, department,
+               status, last_login_at, created_at, updated_at, deleted
+        FROM sys_user
+        WHERE deleted = 0
+          AND (username = #{account} OR email = #{account} OR phone = #{account})
+    </select>
+
+    <select id="selectByEmail" resultType="com.campusops.entity.SysUserEntity">
+        SELECT id, username, password_hash, real_name, email, phone, department,
+               status, last_login_at, created_at, updated_at, deleted
+        FROM sys_user
+        WHERE email = #{email} AND deleted = 0
+    </select>
+
+    <select id="selectByPhone" resultType="com.campusops.entity.SysUserEntity">
+        SELECT id, username, password_hash, real_name, email, phone, department,
+               status, last_login_at, created_at, updated_at, deleted
+        FROM sys_user
+        WHERE phone = #{phone} AND deleted = 0
+    </select>
+
 </mapper>

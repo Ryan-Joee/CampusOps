@@ -28,6 +28,11 @@ public class UserQueryServiceImpl implements UserQueryService {
     }
 
     @Override
+    public SysUserEntity getByAccount(String account) {
+        return sysUserMapper.selectByAccount(account);
+    }
+
+    @Override
     public List<String> getRoleCodesByUserId(Long userId) {
         List<String> codes = sysRoleMapper.selectRoleCodesByUserId(userId);
         return codes != null ? codes : Collections.emptyList();

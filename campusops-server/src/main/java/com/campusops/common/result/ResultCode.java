@@ -21,7 +21,15 @@ public enum ResultCode {
 
     TICKET_NOT_FOUND("TICKET_NOT_FOUND", "工单不存在或无权访问"),
     CATEGORY_NOT_FOUND("CATEGORY_NOT_FOUND", "工单分类不存在"),
-    INVALID_TICKET_PRIORITY("INVALID_TICKET_PRIORITY", "无效的工单优先级");
+    INVALID_TICKET_PRIORITY("INVALID_TICKET_PRIORITY", "无效的工单优先级"),
+
+    USERNAME_EXISTS("USERNAME_EXISTS", "用户名已存在"),
+    EMAIL_EXISTS("EMAIL_EXISTS", "邮箱已被使用"),
+    PHONE_EXISTS("PHONE_EXISTS", "手机号已被使用"),
+    PASSWORD_CONFIRM_NOT_MATCH("PASSWORD_CONFIRM_NOT_MATCH", "两次密码不一致"),
+    CAPTCHA_INVALID("CAPTCHA_INVALID", "验证码错误"),
+    CAPTCHA_EXPIRED("CAPTCHA_EXPIRED", "验证码已过期"),
+    ROLE_NOT_FOUND("ROLE_NOT_FOUND", "系统角色配置异常");
 
     private final String code;
     private final String message;

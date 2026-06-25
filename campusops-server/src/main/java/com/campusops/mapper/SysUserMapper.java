@@ -14,4 +14,10 @@ public interface SysUserMapper extends BaseMapper<SysUserEntity> {
     SysUserEntity selectByUsername(@Param("username") String username);
 
     SysUserEntity selectEnabledById(@Param("id") Long id);
+
+    SysUserEntity selectByAccount(@Param("account") String account);
+
+    SysUserEntity selectByEmail(@Param("email") String email);
+
+    SysUserEntity selectByPhone(@Param("phone") String phone);
 }

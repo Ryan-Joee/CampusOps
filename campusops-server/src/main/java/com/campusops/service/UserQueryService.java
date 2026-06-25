@@ -13,5 +13,7 @@ public interface UserQueryService {
 
     SysUserEntity getEnabledUserById(Long id);
 
+    SysUserEntity getByAccount(String account);
+
     List<String> getRoleCodesByUserId(Long userId);
 }
