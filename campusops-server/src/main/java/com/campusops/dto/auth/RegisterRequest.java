@@ -25,9 +25,11 @@ public class RegisterRequest {
     @Size(min = 1, max = 64, message = "姓名长度1-64")
     private String realName;
 
+    @NotBlank(message = "邮箱不能为空")
     @Email(message = "邮箱格式不正确")
     private String email;
 
+    @NotBlank(message = "手机号不能为空")
     @Size(max = 32, message = "手机号长度不超过32")
     private String phone;
 

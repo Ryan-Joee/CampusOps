@@ -29,8 +29,8 @@ CREATE TABLE sys_user (
     username VARCHAR(64) NOT NULL COMMENT '登录名',
     password_hash VARCHAR(255) NOT NULL COMMENT '密码哈希',
     real_name VARCHAR(64) NOT NULL COMMENT '真实姓名',
-    email VARCHAR(128) NULL COMMENT '邮箱',
-    phone VARCHAR(32) NULL COMMENT '手机号',
+    email VARCHAR(128) NOT NULL COMMENT '邮箱',
+    phone VARCHAR(32) NOT NULL COMMENT '手机号',
     department VARCHAR(128) NULL COMMENT '院系或部门',
     status VARCHAR(32) NOT NULL DEFAULT 'enabled' COMMENT '用户状态：enabled、disabled',
     last_login_at DATETIME NULL COMMENT '最近登录时间',
@@ -38,6 +38,8 @@ CREATE TABLE sys_user (
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     deleted TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否删除：0 否，1 是',
     UNIQUE KEY uk_sys_user_username (username),
+    UNIQUE KEY uk_sys_user_email (email),
+    UNIQUE KEY uk_sys_user_phone (phone),
     KEY idx_sys_user_status (status)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户表';
 

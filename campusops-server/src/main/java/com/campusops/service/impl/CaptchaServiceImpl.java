@@ -51,7 +51,10 @@ public class CaptchaServiceImpl implements CaptchaService {
     public CaptchaResponse generate() {
         String code = randomCode();
         String id = UUID.randomUUID().toString().replace("-", "");
-        store.put(id, new CaptchaEntry(code, System.currentTimeMillis() + EXPIRES_SECONDS * 1000L));
+        long expiresAt = System.currentTimeMillis() + EXPIRES_SECONDS * 1000L;
+        store.put(id, new CaptchaEntry(code, expiresAt));
+
+        log.info("验证码生成: captchaId={}, expiresInSeconds={}", id, EXPIRES_SECONDS);
 
         String base64 = generateImage(code);
         return CaptchaResponse.builder()
@@ -63,11 +66,24 @@ public class CaptchaServiceImpl implements CaptchaService {
 
     @Override
     public boolean validateAndRemove(String captchaId, String code) {
-        if (captchaId == null || code == null) return false;
+        if (captchaId == null || code == null) {
+            log.warn("验证码校验失败: 原因=参数为空, captchaId={}", captchaId);
+            return false;
+        }
         CaptchaEntry entry = store.remove(captchaId);
-        if (entry == null) return false;
-        if (System.currentTimeMillis() > entry.expiresAt) return false;
-        return entry.code.equalsIgnoreCase(code);
+        if (entry == null) {
+            log.warn("验证码校验失败: 原因=不存在或已使用, captchaId={}", captchaId);
+            return false;
+        }
+        if (System.currentTimeMillis() > entry.expiresAt) {
+            log.warn("验证码校验失败: 原因=已过期, captchaId={}", captchaId);
+            return false;
+        }
+        if (!entry.code.equalsIgnoreCase(code)) {
+            log.warn("验证码校验失败: 原因=答案不匹配, captchaId={}", captchaId);
+            return false;
+        }
+        return true;
     }
 
     private String randomCode() {

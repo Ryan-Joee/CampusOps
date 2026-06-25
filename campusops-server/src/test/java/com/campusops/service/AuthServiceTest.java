@@ -139,6 +139,8 @@ class AuthServiceTest {
     void register_shouldCreateUser() {
         when(captchaService.validateAndRemove("c1", "A7K2")).thenReturn(true);
         when(userQueryService.getByUsername("student002")).thenReturn(null);
+        when(sysUserMapper.selectByEmail("student002@campusops.local")).thenReturn(null);
+        when(sysUserMapper.selectByPhone("13800000099")).thenReturn(null);
         when(sysRoleMapper.selectByRoleCode("normal_user")).thenReturn(roleEntity(1L, "normal_user"));
         when(passwordEncoder.encode("123456")).thenReturn("{bcrypt}encoded");
         when(sysUserMapper.insert(any(SysUserEntity.class))).thenAnswer(inv -> {
@@ -197,6 +199,7 @@ class AuthServiceTest {
     void register_duplicatePhone_shouldThrow() {
         when(captchaService.validateAndRemove("c1", "A7K2")).thenReturn(true);
         when(userQueryService.getByUsername("student003")).thenReturn(null);
+        when(sysUserMapper.selectByEmail("student003@campusops.local")).thenReturn(null);
         when(sysUserMapper.selectByPhone("13800000001")).thenReturn(new SysUserEntity());
 
         RegisterRequest req = buildRegisterRequest("student003", "123456", "123456");
@@ -225,6 +228,8 @@ class AuthServiceTest {
     void register_roleNotFound_shouldThrow() {
         when(captchaService.validateAndRemove("c1", "A7K2")).thenReturn(true);
         when(userQueryService.getByUsername("student003")).thenReturn(null);
+        when(sysUserMapper.selectByEmail("student003@campusops.local")).thenReturn(null);
+        when(sysUserMapper.selectByPhone("13800000099")).thenReturn(null);
         when(sysRoleMapper.selectByRoleCode("normal_user")).thenReturn(null);
 
         RegisterRequest req = buildRegisterRequest("student003", "123456", "123456");
@@ -277,6 +282,8 @@ class AuthServiceTest {
         req.setPassword(password);
         req.setConfirmPassword(confirmPassword);
         req.setRealName("王同学");
+        req.setEmail(username + "@campusops.local");
+        req.setPhone("13800000099");
         req.setCaptchaId("c1");
         req.setCaptchaCode("A7K2");
         return req;

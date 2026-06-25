@@ -49,6 +49,7 @@ public class TicketServiceImpl implements TicketService {
             priority = "medium";
         }
         if (!VALID_PRIORITIES.contains(priority)) {
+            log.warn("工单创建失败: 原因=优先级非法, submitterId={}, priority={}", userId, priority);
             throw new BusinessException(ResultCode.INVALID_TICKET_PRIORITY, "优先级仅允许 low/medium/high/urgent");
         }
 
@@ -56,6 +57,7 @@ public class TicketServiceImpl implements TicketService {
         if (request.getCategoryId() != null) {
             TicketCategoryEntity category = ticketCategoryMapper.selectEnabledById(request.getCategoryId());
             if (category == null) {
+                log.warn("工单创建失败: 原因=分类不存在或已禁用, submitterId={}, categoryId={}", userId, request.getCategoryId());
                 throw new BusinessException(ResultCode.CATEGORY_NOT_FOUND, "工单分类不存在或已禁用");
             }
         }
@@ -98,6 +100,10 @@ public class TicketServiceImpl implements TicketService {
         List<Long> submitterIds = buildSubmitterIds(principal, userId);
         Long assigneeId = buildAssigneeId(principal, userId);
 
+        log.info("工单列表查询: userId={}, roles={}, status={}, categoryId={}, keyword={}, page={}, pageSize={}",
+                userId, principal.getRoles(), request.getStatus(), request.getCategoryId(),
+                request.getKeyword(), page, pageSize);
+
         List<TicketEntity> entities = ticketMapper.selectTicketPage(
                 submitterIds, assigneeId,
                 request.getStatus(), request.getCategoryId(),
@@ -119,12 +125,14 @@ public class TicketServiceImpl implements TicketService {
     public TicketDetailVO getTicketDetail(Long userId, Long ticketId) {
         TicketEntity entity = ticketMapper.selectTicketDetail(ticketId);
         if (entity == null) {
+            log.warn("工单详情查询失败: 原因=工单不存在, ticketId={}, userId={}", ticketId, userId);
             throw new BusinessException(ResultCode.TICKET_NOT_FOUND, "工单不存在或无权访问");
         }
 
         LoginUserPrincipal principal = getCurrentPrincipal();
         checkAccess(principal, entity);
 
+        log.info("工单详情查询: ticketId={}, userId={}", ticketId, userId);
         return toDetailVO(entity);
     }
 
@@ -192,6 +200,8 @@ public class TicketServiceImpl implements TicketService {
             return;
         }
 
+        log.warn("工单访问被拒: 原因=无权访问, ticketId={}, userId={}, roles={}",
+                entity.getId(), currentUserId, principal.getRoles());
         throw new BusinessException(ResultCode.TICKET_NOT_FOUND, "工单不存在或无权访问");
     }
 

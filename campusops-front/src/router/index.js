@@ -2,8 +2,10 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { useUserStore } from '../stores/user'
 import BasicLayout from '../layouts/BasicLayout.vue'
 import LoginView from '../views/LoginView.vue'
+import RegisterView from '../views/RegisterView.vue'
 import DashboardView from '../views/DashboardView.vue'
 import TicketListView from '../views/ticket/TicketListView.vue'
+import TicketCreateView from '../views/ticket/TicketCreateView.vue'
 import KnowledgeListView from '../views/knowledge/KnowledgeListView.vue'
 import AiAnalysisView from '../views/ai/AiAnalysisView.vue'
 
@@ -13,6 +15,12 @@ const routes = [
     name: 'Login',
     component: LoginView,
     meta: { title: '登录', public: true },
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: RegisterView,
+    meta: { title: '注册', public: true },
   },
   {
     path: '/',
@@ -30,6 +38,12 @@ const routes = [
         name: 'TicketList',
         component: TicketListView,
         meta: { title: '工单管理' },
+      },
+      {
+        path: 'tickets/create',
+        name: 'TicketCreate',
+        component: TicketCreateView,
+        meta: { title: '新建工单' },
       },
       {
         path: 'knowledge',
@@ -56,6 +70,21 @@ router.beforeEach(async (to) => {
   document.title = to.meta.title ? `${to.meta.title} - CampusOps` : 'CampusOps'
 
   if (to.meta.public) {
+    // If already logged in, redirect away from login page
+    const token = localStorage.getItem('campusops_token')
+    if (token && to.path === '/login') {
+      const userStore = useUserStore()
+      if (userStore.userInfo) {
+        return { path: '/dashboard' }
+      }
+      try {
+        await userStore.fetchCurrentUser()
+        return { path: '/dashboard' }
+      } catch {
+        userStore.clearSession()
+        return true
+      }
+    }
     return true
   }
 

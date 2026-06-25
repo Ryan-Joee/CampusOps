@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { login, getCurrentUser } from '../api/auth'
+import { login, register, getCurrentUser } from '../api/auth'
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -27,6 +27,14 @@ export const useUserStore = defineStore('user', {
       }
       this.setToken(res.data.accessToken)
       await this.fetchCurrentUser()
+    },
+
+    async registerAction(payload) {
+      const res = await register(payload)
+      if (res.code !== 'SUCCESS') {
+        throw new Error(res.message || '注册失败')
+      }
+      return res.data
     },
 
     async fetchCurrentUser() {

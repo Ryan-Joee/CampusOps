@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { DataAnalysis, Document, House, Tickets } from '@element-plus/icons-vue'
 import { useUserStore } from '../stores/user'
+import logoImg from '../assets/logo.png'
 
 const route = useRoute()
 const router = useRouter()
@@ -35,7 +36,7 @@ function handleCommand(command) {
   <el-container class="app-shell">
     <el-aside class="app-sidebar" width="232px">
       <div class="brand">
-        <div class="brand-mark">C</div>
+        <img :src="logoImg" alt="CampusOps" class="brand-logo" />
         <div>
           <div class="brand-name">CampusOps</div>
           <div class="brand-desc">校园 IT 服务平台</div>

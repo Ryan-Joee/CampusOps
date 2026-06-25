@@ -44,6 +44,7 @@ public class GlobalExceptionHandler {
         String message = ex.getBindingResult().getFieldErrors().stream()
                 .map(fe -> fe.getField() + ": " + fe.getDefaultMessage())
                 .collect(Collectors.joining("; "));
+        log.warn("参数校验失败: type=MethodArgumentNotValid, message={}", message);
         return ResponseEntity.badRequest()
                 .body(ApiResponse.error(ResultCode.BAD_REQUEST, message));
     }
@@ -53,6 +54,7 @@ public class GlobalExceptionHandler {
         String message = ex.getBindingResult().getFieldErrors().stream()
                 .map(fe -> fe.getField() + ": " + fe.getDefaultMessage())
                 .collect(Collectors.joining("; "));
+        log.warn("参数校验失败: type=BindException, message={}", message);
         return ResponseEntity.badRequest()
                 .body(ApiResponse.error(ResultCode.BAD_REQUEST, message));
     }
@@ -62,18 +64,21 @@ public class GlobalExceptionHandler {
         String message = ex.getConstraintViolations().stream()
                 .map(cv -> cv.getPropertyPath() + ": " + cv.getMessage())
                 .collect(Collectors.joining("; "));
+        log.warn("参数校验失败: type=ConstraintViolation, message={}", message);
         return ResponseEntity.badRequest()
                 .body(ApiResponse.error(ResultCode.BAD_REQUEST, message));
     }
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<ApiResponse<Void>> handleAuthentication(AuthenticationException ex) {
+        log.warn("认证失败: type={}", ex.getClass().getSimpleName());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(ApiResponse.error(ResultCode.UNAUTHORIZED));
     }
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ApiResponse<Void>> handleAccessDenied(AccessDeniedException ex) {
+        log.warn("鉴权失败: 无权访问");
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
                 .body(ApiResponse.error(ResultCode.FORBIDDEN));
     }

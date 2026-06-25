@@ -11,3 +11,7 @@ export function getTicketDetail(id) {
 export function createTicket(data) {
   return request.post('/tickets', data)
 }
+
+export function getTicketCategories() {
+  return request.get('/ticket-categories')
+}
