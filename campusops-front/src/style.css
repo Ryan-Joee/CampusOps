@@ -269,7 +269,7 @@ select {
 .captcha-img-wrap {
   flex-shrink: 0;
   width: 110px;
-  height: 100%;
+  height: 36px;
   border: 1px solid #d1d5db;
   border-radius: 6px;
   overflow: hidden;
