@@ -117,6 +117,8 @@ class AuthControllerTest {
         req.setPassword("123456");
         req.setConfirmPassword("123456");
         req.setRealName("王同学");
+        req.setEmail("student002@campusops.local");
+        req.setPhone("13800000007");
         req.setCaptchaId("c1");
         req.setCaptchaCode("A7K2");
 
@@ -145,6 +147,8 @@ class AuthControllerTest {
         req.setPassword("123456");
         req.setConfirmPassword("654321");
         req.setRealName("王同学");
+        req.setEmail("student002@campusops.local");
+        req.setPhone("13800000007");
         req.setCaptchaId("c1");
         req.setCaptchaCode("A7K2");
 
