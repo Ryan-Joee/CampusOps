@@ -126,10 +126,6 @@ function formatDate(val) {
   return val.replace('T', ' ').slice(0, 16)
 }
 
-function goToDetail(row) {
-  router.push(`/tickets/${row.id}`)
-}
-
 onMounted(fetchTickets)
 </script>
 
@@ -189,9 +185,6 @@ onMounted(fetchTickets)
         :data="tableData"
         v-loading="loading"
         empty-text="暂无工单数据"
-        highlight-current-row
-        @row-click="goToDetail"
-        style="cursor: pointer"
       >
         <el-table-column prop="ticketNo" label="工单编号" width="160" />
         <el-table-column prop="title" label="标题" min-width="220" show-overflow-tooltip />
