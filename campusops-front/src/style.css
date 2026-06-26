@@ -249,7 +249,7 @@ select {
   border-radius: 8px;
 }
 
-.login-card ::deep(.el-card__body) {
+.login-card .el-card__body {
   padding: 28px;
 }
 
@@ -413,7 +413,7 @@ select {
     max-width: 100%;
   }
 
-  .login-card :deep(.el-card__body) {
+  .login-card .el-card__body {
     padding: 16px;
   }
 
