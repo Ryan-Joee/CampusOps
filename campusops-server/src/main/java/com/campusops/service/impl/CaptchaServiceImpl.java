@@ -26,8 +26,11 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class CaptchaServiceImpl implements CaptchaService {
 
-    private static final int WIDTH = 130;
-    private static final int HEIGHT = 50;
+    private static final int WIDTH = 120;
+    private static final int HEIGHT = 40;
+    private static final int PAD_X = 15;
+    private static final int PAD_Y = 10;
+    private static final int FONT_SIZE = 20;
     private static final int CODE_LENGTH = 4;
     private static final int EXPIRES_SECONDS = 120;
     private static final String CHARS = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
@@ -97,31 +100,38 @@ public class CaptchaServiceImpl implements CaptchaService {
     private String generateImage(String code) {
         BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
         Graphics2D g = image.createGraphics();
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         // 背景
         g.setColor(new Color(245, 248, 252));
         g.fillRect(0, 0, WIDTH, HEIGHT);
 
-        // 干扰线
+        // 干扰线（限制在 padding 内）
         g.setColor(new Color(220, 220, 220));
-        for (int i = 0; i < 6; i++) {
-            int x1 = RANDOM.nextInt(WIDTH);
-            int y1 = RANDOM.nextInt(HEIGHT);
-            int x2 = RANDOM.nextInt(WIDTH);
-            int y2 = RANDOM.nextInt(HEIGHT);
+        int drawW = WIDTH - 2 * PAD_X;
+        int drawH = HEIGHT - 2 * PAD_Y;
+        for (int i = 0; i < 4; i++) {
+            int x1 = PAD_X + RANDOM.nextInt(drawW);
+            int y1 = PAD_Y + RANDOM.nextInt(drawH);
+            int x2 = PAD_X + RANDOM.nextInt(drawW);
+            int y2 = PAD_Y + RANDOM.nextInt(drawH);
             g.drawLine(x1, y1, x2, y2);
         }
 
-        // 文字
-        Font font = new Font("Arial", Font.BOLD, 28);
+        // 文字：Monospaced 等宽，均分绘制区，每字符居中在其槽位内，无旋转
+        Font font = new Font("Monospaced", Font.BOLD, FONT_SIZE);
         g.setFont(font);
+        FontMetrics fm = g.getFontMetrics();
+
+        int drawAreaW = WIDTH - 2 * PAD_X;
+        int slotWidth = drawAreaW / CODE_LENGTH;
+        int baselineY = (HEIGHT + fm.getAscent() - fm.getDescent()) / 2;
+
         for (int i = 0; i < code.length(); i++) {
             g.setColor(new Color(20 + RANDOM.nextInt(80), 40 + RANDOM.nextInt(80), 80 + RANDOM.nextInt(100)));
-            g.translate(8 + i * 30 + RANDOM.nextInt(5), 18 + RANDOM.nextInt(12));
-            g.rotate(Math.toRadians(-15 + RANDOM.nextInt(30)));
-            g.drawString(String.valueOf(code.charAt(i)), 0, 0);
-            g.rotate(Math.toRadians(15 - RANDOM.nextInt(30)));
-            g.translate(-(8 + i * 30 + RANDOM.nextInt(5)), -(18 + RANDOM.nextInt(12)));
+            int cw = fm.charWidth(code.charAt(i));
+            int x = PAD_X + i * slotWidth + (slotWidth - cw) / 2;
+            g.drawString(String.valueOf(code.charAt(i)), x, baselineY);
         }
 
         g.dispose();
